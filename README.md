@@ -15,4 +15,4 @@ My name is Kushank and I'm a first year PhD student at the _Institute for Resour
 * Assignment 4
 * Assignment 5
 
-! [Are you a data scientist?] (C:\Users\Kushank\Pictures\datascience.png)
+![Are you a data scientist?](datascience.png)
