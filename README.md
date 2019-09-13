@@ -7,7 +7,7 @@ To any unknowing visitor who happens to drop-by, this repository contains assign
 My name is Kushank and I'm a first year PhD student at the _Institute for Resource, Environment and Sustainability_ at UBC. I'm a Earth Science graduate having worked as a researcher with Govt. institutes and not-for-profits in India. My research interests lie at the intersection of food-water nexus and extreme events. 
 
 
-## If you found it interesting and wondering if there are other such assignments, gere's a list for easy navigation:
+## If you found it interesting and wondering if there are other such assignments, here's a list for easy navigation:
 
 * [Assignment 1](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-kushankb) 
 * Assignment 2
