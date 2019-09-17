@@ -1,0 +1,27 @@
+---
+title: "HW01_Gapminder"
+output: html_document
+---
+
+```{r load, warning=FALSE}
+library(gapminder)
+library(DT)
+```
+#Home work 1 with Gap minder data
+
+## Exploring the Gapminder data
+```{r}
+variable.names(gapminder)
+summary(gapminder)
+```
+
+## Looking at the relation between GDP per capita vs Life Expectancy
+```{r}
+plot(gapminder$lifeExp,gapminder$gdpPercap)
+```
+
+##Looking at the relation between GDP per capita vs life expectancy statistically, the correlation value is:
+```{r}
+cor(gapminder$lifeExp,gapminder$gdpPercap, method=c("pearson","kendall","spearman"))
+```
+
