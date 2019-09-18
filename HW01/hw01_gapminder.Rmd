@@ -8,15 +8,20 @@ library(gapminder)
 library(DT)
 ```
 #Home work 1 with Gap minder data
-```{r}
-anyNA(gapminder)
-```
+
 
 ## Exploring the Gapminder data
 ```{r}
 str(gapminder)
 
-summary(gapminder)
+```
+## Checking for Missing Values
+```{r}
+anyNA(gapminder)
+```
+## Checking the mean GDP per capita
+```{r}
+mean(gapminder$gdpPercap)
 ```
 
 ## Looking at the relation between GDP per capita vs Life Expectancy

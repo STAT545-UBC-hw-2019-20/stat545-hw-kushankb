@@ -1,6 +1,6 @@
 ---
 title: "HW01_Gapminder"
-output: ioslides
+output: ioslides_presentation
 ---
 
 ```{r load, warning=FALSE, echo=FALSE}
@@ -11,9 +11,13 @@ library(DT)
 
 ## Exploring the Gapminder data
 ```{r}
-variable.names(gapminder)
 summary(gapminder)
 ```
+## Checking mean GDP per Capita of each country
+```{r}
+mean(gapminder$gdpPercap)
+```
+
 
 ## Looking at the relation between GDP per capita vs Life Expectancy
 ```{r}
@@ -24,4 +28,12 @@ plot(gapminder$lifeExp,gapminder$gdpPercap)
 ```{r}
 cor(gapminder$lifeExp,gapminder$gdpPercap, method=c("pearson","kendall","spearman"))
 ```
+
+## Exploring how GDP per cap changed over the years
+```{r}
+plot(gapminder$gdpPercap,gapminder$year)
+```
+
+
+
 
