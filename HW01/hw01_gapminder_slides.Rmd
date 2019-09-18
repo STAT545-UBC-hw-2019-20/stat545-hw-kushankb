@@ -10,27 +10,27 @@ library(DT)
 #Home work 1 with Gap minder data
 
 ## Exploring the Gapminder data
-```{r}
+```{r, echo=FALSE}
 summary(gapminder)
 ```
 ## Checking mean GDP per Capita of each country
-```{r}
+```{r, echo=FALSE}
 mean(gapminder$gdpPercap)
 ```
 
 
 ## Looking at the relation between GDP per capita vs Life Expectancy
-```{r}
+```{r,echo=FALSE}
 plot(gapminder$lifeExp,gapminder$gdpPercap)
 ```
 
 ##Looking at the relation between GDP per capita vs life expectancy statistically, the correlation value is:
-```{r}
+```{r, echo=FALSE}
 cor(gapminder$lifeExp,gapminder$gdpPercap, method=c("pearson","kendall","spearman"))
 ```
 
 ## Exploring how GDP per cap changed over the years
-```{r}
+```{r, echo=FALSE}
 plot(gapminder$gdpPercap,gapminder$year)
 ```
 
