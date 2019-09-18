@@ -1,6 +1,6 @@
 ---
 title: "HW01_Gapminder"
-output: md_document
+output: ioslides
 ---
 
 ```{r load, warning=FALSE, echo=FALSE}
@@ -8,14 +8,10 @@ library(gapminder)
 library(DT)
 ```
 #Home work 1 with Gap minder data
-```{r}
-anyNA(gapminder)
-```
 
 ## Exploring the Gapminder data
 ```{r}
-str(gapminder)
-
+variable.names(gapminder)
 summary(gapminder)
 ```
 
