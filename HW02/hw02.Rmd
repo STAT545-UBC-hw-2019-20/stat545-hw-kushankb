@@ -6,26 +6,33 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-#Loading libraries
-```{r}
+###Loading libraries
+```{r, echo=FALSE, message=FALSE}
 library(gapminder)
 library(tidyverse)
+library(DT)
+library(knitr)
 ```
 # Exercise 1
 
 ##1.1 
 Filtering three countries in the 1970's
 ```{r}
-countries_1970<-gapminder%>% 
+gapminder%>% 
+  filter(year>=1970& year<1980)%>% 
   filter(country=='India'|country=='Mexico'|country=='Canada') %>% 
-  filter(year>=1970)
+  kable()
+
 ```
 
 ##1.2 
 Selecting Country and GDPperCap
 ```{r}
-countries_1970 %>% 
-  select(country, gdpPercap)
+gapminder %>% 
+  filter(year>=1970& year<1980)%>% 
+  filter(country=='India'|country=='Mexico'|country=='Canada') %>% 
+    select(country, gdpPercap) %>% 
+  kable()
 ```
 
 ##1.3 
@@ -33,7 +40,8 @@ Filtering Gapminder- Drop in life expectancy
 ```{r}
 gapminder %>% 
   mutate(IncLifeExp= lifeExp-lag(lifeExp,1)) %>% 
-  filter(IncLifeExp>0) 
+  filter(IncLifeExp>0) %>% 
+  datatable()
  # filter(IncLifeExp!=min(year))
 ```
 
@@ -42,7 +50,8 @@ Maximum GDP per capita of each country
 ```{r}
 gapminder %>%
   group_by(country) %>% 
-  filter(gdpPercap==max(gdpPercap))
+  filter(gdpPercap==max(gdpPercap)) %>% 
+  datatable()
 ```
 
 ##1.5
@@ -63,20 +72,23 @@ ggplot(gapmindercan)+
 The two variables chosen for this exercise are Continent and Life Expectancy Continent being the categorical variable while Life Expectancy the quantitative variable. 
 
 
-__Let's look at the categorical variable first- Continent.__
+###Let's look at the categorical variable first- Continent.
 
-Following are the different continents in the data and the mean: 
+####Following are the different continents in the data and the mean: 
 ```{r}
 gapminder %>% 
-  distinct(continent)
+  distinct(continent) %>% 
+  kable()
 
 ```
-Visualizing number of enteries in each continent
+
+####Visualizing number of enteries in each continent
 ```{r}
 gapminder %>% 
   group_by(continent) %>% 
   count() %>% 
-  arrange(n)
+  arrange(n) %>% 
+  kable()
   #table(continent)
   ggplot(gapminder,aes(x=continent))+
   geom_bar(stat = "count")+
@@ -84,13 +96,13 @@ gapminder %>%
   
 ```
 
-Visualizing countries within the continents
+####Visualizing countries within the continents
 
 ```{r}
 gapminder %>%
   select(country,continent) %>% 
   group_by(continent) %>%
-  summarize(No_of_Conti = length(continent)) %>%
+  summarize(No_of_Conti = length(continent))%>%
   ggplot(aes(continent,No_of_Conti)) +
   geom_bar(stat='identity') +
   labs(title = "Number of Countries per Continent",
@@ -99,17 +111,19 @@ gapminder %>%
 ```
 
 
-__Now lets look at the Life Expectancy (Quantitative) variable__
 
-Some basic characterstics(minimum, mean, median, quartile) of Population variables are as follows: 
+###Now lets look at the Life Expectancy (Quantitative) variable
+
+####Some basic characterstics(minimum, mean, median, quartile) of Population variables are as follows: 
 ```{r}
 gapminder %>% 
   select(lifeExp) %>% 
-  summary()
+  summary() %>% 
+  kable()
 ```
 The minimum life expectancy is 23.60 years while the maximum is 82.60. Further, the mean life expectancy of the entire population in the data is 59.47 years. 
 
-Now let's look at a graphical representation of the variable to see how the data is distributed. Following is a Life Expectancy histogram:
+####Now let's look at a graphical representation of the variable to see how the data is distributed. Following is a Life Expectancy histogram:
 
 ```{r}
 gapminder %>% 
@@ -119,7 +133,7 @@ gapminder %>%
 
 From the histogram it can be seen that the data is non-symmetrical and is skewed to the left. 
 
-Now let's look at the variability of Life Expectancy in different continents by plotting a density plot.
+####Now let's look at the variability of Life Expectancy in different continents by plotting a density plot.
 
 ```{r}
 gapminder %>% 
@@ -130,9 +144,9 @@ gapminder %>%
 
 It can be observed that Oceania, Europe and America have the highest Life Expectancy where as Africa has the least. 
 
-## Exercise 3
+# Exercise 3
 
-Plot 1: Scatter plot for India
+##Plot 1: Scatter plot for India
 ```{r}
 gapminder %>% 
   filter(country=="India") %>% 
@@ -145,7 +159,7 @@ gapminder %>%
 It is evident from the graph that the life expectancy of the population in India increases with the GDP per capita. Two different trends can be seen from the graph. One with high slope that suggestes a substantial increase in life expectancy when GDP increased from 500 to ~1000, followed by a smaller slope that suggests a plateu in the life expectancy.  
 
 
-Plot 2: 
+##Plot 2: 
 ```{r}
 airquality %>% 
   ggplot(aes(Ozone))+
@@ -159,18 +173,21 @@ airquality %>%
 ```
 
 
-##Recycling
+#Recycling
 
-### 1. 
+## 1. 
 Analyst would not succeed in getting all the data for Afghanistan and Rwanda. The following code run by the analyst produces 12 rows:
 ```{r, Echo=FALSE}
-filter(gapminder, country == c("Rwanda", "Afghanistan"))
+filter(gapminder, country == c("Rwanda", "Afghanistan")) %>% 
+  datatable()
 
 ```
 
 The correct way to get the results would be by using the or symbol and not a fector. It can be done as follows:
 ```{r}
 gapminder %>% 
-  filter(country=="Rwanda"|country=="Afghanistan")
+  filter(country=="Rwanda"|country=="Afghanistan") %>% 
+  datatable()
 ```
 
+## 2. All the tables have been created using datatable() and kable(). 
