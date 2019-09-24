@@ -39,6 +39,8 @@ gapminder %>%
 Filtering Gapminder- Drop in life expectancy 
 ```{r}
 gapminder %>% 
+  arrange(year) %>% 
+  group_by(country) %>% 
   mutate(IncLifeExp= lifeExp-lag(lifeExp,1)) %>% 
   filter(IncLifeExp>0) %>% 
   datatable()
