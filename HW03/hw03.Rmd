@@ -15,16 +15,31 @@ library(ggplot2)
 library(ggridges)
 library(scales)
 ```
-## Task 5: Exploring how life expectacy changed over time on different continents.
+## Task 5: Exploring how life expectancy changed over time on different continents.
 The following table shows the minimum and maximum life expectancy and the corresponding countries on different continents every year. It can be seen that the minimum life expectancy was in Rwanada, Africa in the year 1992 and the maximum life expectancy was in Afghanistan, Asia in the year 2007. The Range column shows the range of life expectancy on each continent every year. 
+
 ```{r}
 gapminder%>%
   group_by(continent,year) %>%  
-  summarise(MinLifeExp=min(lifeExp),MinCountry=country[lifeExp==MinLifeExp], #this summarizes the minimum life expectancy with the corresponding countries on each continent every year. 
-            MaxLifeExp=max(lifeExp),MaxCountry=country[lifeExp==MaxLifeExp],#Shows maximum life expectancy with corresponding countries on each continent every year. 
-            MeanLifeExp=mean(lifeExp)) %>%  # Calulates the mean life expectancy on each continent every year.
-  mutate(Range=MaxLifeExp-MinLifeExp) %>%  # Calculates the range of life expectancy on each continent every year.
-  knitr::kable()
-  
+  summarise(MinLifeExp=min(lifeExp),MinCountry=country[lifeExp==MinLifeExp], #this summarizes the minimum life                                          expectancy with the corresponding countries on each continent every year. 
+            MaxLifeExp=max(lifeExp),MaxCountry=country[lifeExp==MaxLifeExp],#Shows maximum life expectancy with                                                             corresponding countries on each continent every year. 
+            MeanLifeExp=round(mean(lifeExp),2)) %>%  # Calulates the mean life expectancy on each continent every                                                        year.
+  mutate(Range=round((Range=MaxLifeExp-MinLifeExp))) %>%  # Calculates the range of life expectancy on each                                                                  continent every year.
+  DT::datatable() 
+```
+
+Now let's look at a graphical visualization of how the life expectancy change over time on different continents.
+The graph shows how life expectancy has increased over time for all countries. It can also be infered that Oceania has had the highest life expectancy while Africa has the least. There is been a steady fast increase in life expectancy in Asia and America while Oceania and Europe seems to have had slower growth in life expectancy. In case of Aftrica, a plateau can be observed post 1990 suggesting that there has been no increase in life expactancy in Africa. 
+
+```{r}
+gapminder %>% 
+  group_by(continent,year) %>%  
+  summarise(MeanLifeExp=round(mean(lifeExp),2)) %>%
+  ggplot(aes(year, MeanLifeExp,color=continent))+
+  geom_point(shape=19,size=3)+
+  labs(title="Change in mean life Expectancy over time",
+               x="Years",
+               y="Mean Life Expectancy")#+  geom_smooth(method="lm",alpha=0.1)
+  #facet_wrap(~continent)
 ```
 
