@@ -1,0 +1,30 @@
+---
+title: "Assignment 03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message = FALSE, warning = FALSE}
+# Installing packages
+library(tidyverse)
+library(gapminder)
+library(ggplot2)
+library(ggridges)
+library(scales)
+```
+## Task 5: Exploring how life expectacy changed over time on different continents.
+The following table shows the minimum and maximum life expectancy and the corresponding countries on different continents every year. It can be seen that the minimum life expectancy was in Rwanada, Africa in the year 1992 and the maximum life expectancy was in Afghanistan, Asia in the year 2007. The Range column shows the range of life expectancy on each continent every year. 
+```{r}
+gapminder%>%
+  group_by(continent,year) %>%  
+  summarise(MinLifeExp=min(lifeExp),MinCountry=country[lifeExp==MinLifeExp], #this summarizes the minimum life expectancy with the corresponding countries on each continent every year. 
+            MaxLifeExp=max(lifeExp),MaxCountry=country[lifeExp==MaxLifeExp],#Shows maximum life expectancy with corresponding countries on each continent every year. 
+            MeanLifeExp=mean(lifeExp)) %>%  # Calulates the mean life expectancy on each continent every year.
+  mutate(Range=MaxLifeExp-MinLifeExp) %>%  # Calculates the range of life expectancy on each continent every year.
+  knitr::kable()
+  
+```
+
