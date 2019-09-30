@@ -28,7 +28,7 @@ gapminder%>%
   DT::datatable() 
 ```
 
-Now let's look at a graphical visualization of how the life expectancy change over time on different continents.
+Now, let's look at a graphical visualization of how the life expectancy change over time on different continents.
 The graph shows how life expectancy has increased over time for all countries. It can also be infered that Oceania has had the highest life expectancy while Africa has the least. There is been a steady fast increase in life expectancy in Asia and America while Oceania and Europe seems to have had slower growth in life expectancy. In case of Aftrica, a plateau can be observed post 1990 suggesting that there has been no increase in life expactancy in Africa. 
 
 ```{r}
@@ -42,4 +42,36 @@ gapminder %>%
                y="Mean Life Expectancy")#+  geom_smooth(method="lm",alpha=0.1)
   #facet_wrap(~continent)
 ```
+
+
+Task 2: Minimum and Maximum GDP per capita for all continents
+The following table shows the maximum and minimum GDP per capita for each continent and the corresponding countries and year. The data has been grouped by continent and further minimum and maximum GDP per capita values have beens shown with the cooresponding countries and year. It can be seen that the maximum GDP during the time period was in Kuwait, Asia in the year 1957. While the country with the minimum GDP was Congo, DEm.Rep. in the year 2002. 
+In Africa, minimmum GDP per capita was found in the Congo and Dem.Rep in the year 2002 and the maximum was found in country Libya in the year 1977. Similar inferences can be made by the following table. 
+
+```{r}
+gapminder %>% 
+  group_by(continent) %>% 
+  summarise(MinGDP=min(gdpPercap),Mincountry=country[gdpPercap==MinGDP],Minyear=year[gdpPercap==MinGDP],
+            MaxGDP=max(gdpPercap),Maxcountry=country[gdpPercap==MaxGDP],Maxyear=year[gdpPercap==MaxGDP]) %>% 
+    mutate(Range=round((Range=MaxGDP-MinGDP))) %>% 
+  knitr::kable()
+```
+
+Time to plot the data minimum and maximum GDP per capita for all the continents.It can be seen that Asia has the maximum range of GDP per capita where as Africa and Oceania have the smallest and comparable range. All the continents seem to have countries having similar minimum GDP per capita and varying maximum GDP per capita.
+
+```{r}
+gapminder %>% 
+   group_by(continent) %>% 
+   summarise(MinGDP=min(gdpPercap),MaxGDP=max(gdpPercap)) %>%
+  ggplot(aes(size=2))+
+  geom_point(aes(continent,MaxGDP, color="green"))+
+  geom_point(aes(continent,MinGDP, color="blue"))+
+  labs(title="Minimum and Maximum GDP of each",
+               x="Continent",
+               y="GDP per capita")+
+  scale_color_discrete("",labels=c("Minimum GDP", "Maximum GDP"))
+  
+```
+
+
 
