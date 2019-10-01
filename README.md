@@ -10,8 +10,8 @@ My name is Kushank and I'm a first year PhD student at the _Institute for Resour
 ## If you found it interesting and wondering if there are other such assignments, here's a list for easy navigation:
 
 * [Assignment 1](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-kushankb) 
-* Assignment 2
-* Assignment 3
+* [Assignment 2](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-kushankb/HW02/hw02.html)
+* [Assignment 3](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-kushankb/HW03/hw03.html)
 * Assignment 4
 * Assignment 5
 
