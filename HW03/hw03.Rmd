@@ -29,7 +29,7 @@ gapminder%>%
 ```
 
 Now, let's look at a graphical visualization of how the life expectancy change over time on different continents.
-The graph shows how life expectancy has increased over time for all countries. It can also be infered that Oceania has had the highest life expectancy while Africa has the least. By looking at the slope of the lines, we can infer that there has been a steady increase in life expectancy in Asia and America while Oceania and Europe seems to have had slower growth in life expectancy. In case of Aftrica, a plateau can be observed post 1990 suggesting that there has been no increase in life expactancy in Africa. 
+The graph shows how life expectancy has increased over time for all countries. It can also be infered that Oceania has had the highest life expectancy while Africa has the least. By looking at the slope of the lines, we can infer that there has been a steady increase in life expectancy in Asia and America while Oceania and Europe seems to have had slower increase in life expectancy. In case of Aftrica, a plateau can be observed in the plotted data post 1990 suggesting that there has been either no increase or possibly a decrease in life expactancy in Africa. These data points plausibly result in lowering the slope of the regression line for Africa too. It would be interesting to explore this further. 
 
 ```{r}
 gapminder %>% 
@@ -41,13 +41,13 @@ gapminder %>%
   labs(title="Change in mean life Expectancy over time",
                x="Years",
                y="Mean Life Expectancy")#+  geom_smooth(method="lm",alpha=0.1)
-  #facet_wrap(~continent)
+  
 ```
 
 
 ##Task 2: Minimum and Maximum GDP per capita for all continents
-The following table shows the maximum and minimum GDP per capita for each continent and the corresponding countries and year. The data has been grouped by continent and further minimum and maximum GDP per capita values have beens shown with the cooresponding countries and year. It can be seen that the maximum GDP during the time period was in Kuwait, Asia in the year 1957. While the country with the minimum GDP was Congo, DEm.Rep. in the year 2002. 
-In Africa, minimmum GDP per capita was found in the Congo and Dem.Rep in the year 2002 and the maximum was found in country Libya in the year 1977. Similar inferences can be made by the following table. 
+The following table shows the maximum and minimum GDP per capita for each continent and the corresponding countries and year. The data has been grouped by continent and further minimum and maximum GDP per capita values are shown with the cooresponding countries and year. It can be observed that the country with maximum GDP is Kuwait, Asia in the year 1957. And the country with the minimum GDP is Congo and DEm.Rep., Africa in the year 2002. 
+Further, country-wise inferences can be made. For example in Africa, minimmum GDP per capita was found in the Congo and Dem.Rep in the year 2002 and the maximum was found in country Libya in the year 1977. Similar inferences can be made by the following table. 
 
 ```{r}
 gapminder %>% 
@@ -55,10 +55,11 @@ gapminder %>%
   summarise(MinGDP=min(gdpPercap),Mincountry=country[gdpPercap==MinGDP],Minyear=year[gdpPercap==MinGDP], 
             MaxGDP=max(gdpPercap),Maxcountry=country[gdpPercap==MaxGDP],Maxyear=year[gdpPercap==MaxGDP]) %>% 
     mutate(Range=round((Range=MaxGDP-MinGDP))) %>% 
+  arrange(continent) %>% 
   knitr::kable()
 ```
 
-Time to plot the data minimum and maximum GDP per capita for all the continents.It can be seen that Asia has the maximum range of GDP per capita where as Africa and Oceania have the smallest and comparable range. All the continents seem to have countries having similar minimum GDP per capita and varying maximum GDP per capita.
+Time to visualize the minimum and maximum GDP per capita for all the continents in more graphic form.It can be observed that Asia has the maximum range of GDP per capita where as Africa and Oceania have the smallest and comparable range. All the continents seem to have countries having similar minimum GDP per capita and varying maximum GDP per capita.
 
 ```{r}
 gapminder %>% 
@@ -76,14 +77,14 @@ gapminder %>%
 
 
 ##Task 6
-Asia seems to have the highest range of GDP per capita among other countries. Let's explore this a little further. The following plot shows that there are only a few countires which have GDP above 60,000$. It can also be observed that these countries don't have very high life expectancy, something that one would expect in.It looks like there are only a handful countries that have GDP over 40,000 in Asia. Let's try to identify these and add them to a tibble.
+Asia seems to have the highest range of GDP per capita among other countries. Let's explore this a little further. The following plot shows that there are only a few countires which have GDP above 60,000$. It can also be observed that these countries don't have very high life expectancy, something that one would expect. It looks like there are only a handful countries that have GDP over 40,000 in Asia. 
 ```{r}
 gapminder %>% 
   filter(continent=='Asia') %>%
   group_by(year) %>% 
   arrange(year) %>% 
   ggplot(aes(gdpPercap,lifeExp, size=pop/1000000))+
-  geom_point(alpha=0.4, shape=21, color="purple")+
+  geom_point(alpha=0.7, shape=21, color="purple")+
   labs(title="GDP per cap vs Life expectancy in Asia",
        x="GDP per capita",
        y="Life Expectancy")
@@ -91,6 +92,8 @@ gapminder %>%
 ```
 
 Now, let's try to find out the specific countries that have extremely high GDP per capita in Asia compared to the other countries and add them in a tibble. 
+
+From the table, it can be inferred that most of the outliers (data points above 40000 GDP) belong to Kuwait except one (Singapore). There has been a steady increase in the Gross GDP of Kuwait over the years. However,the GDP per capita shows a different trend. Clearly, something significant happened in the 1970's that resulted in the decline of both GDP per capita and GROSS GDP in Kuwait.  
 
 ```{r}
 gapminder %>% 
@@ -105,6 +108,5 @@ gapminder %>%
 ```
 
 
-From the table, it can be inferred that most of the outliers (data points above 40000 GDP) belong to Kuwait except one (Singapore). There has been a steady increase in the Gross GDP of Kuwait over the years. However,the GDP per capita shows a different trend. Clearly, something significant happened in the 1970's that resulted in a decline in both GDP per capita and GROSS GDP.  
 
 
