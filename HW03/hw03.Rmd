@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gapminder)
 library(ggplot2)
-library(ggridges)
+library(ggridges)#to make some really cool ridge plots!
 library(scales)
 ```
 ## Task 5: Exploring how life expectancy changed over time on different continents.
@@ -34,8 +34,8 @@ The graph shows how life expectancy has increased over time for all countries. I
 ```{r}
 gapminder %>% 
   group_by(continent,year) %>%  
-  summarise(MeanLifeExp=round(mean(lifeExp),2)) %>%
-  ggplot(aes(year, MeanLifeExp,color=continent))+
+  summarise(MeanLifeExp=round(mean(lifeExp),2)) %>% #summarize gives one row with the results
+  ggplot(aes(year, MeanLifeExp,color=continent))+ #color is for outline of the geom while fill is color inside
   geom_point(shape=19,size=3)+
   labs(title="Change in mean life Expectancy over time",
                x="Years",
@@ -44,14 +44,14 @@ gapminder %>%
 ```
 
 
-Task 2: Minimum and Maximum GDP per capita for all continents
+##Task 2: Minimum and Maximum GDP per capita for all continents
 The following table shows the maximum and minimum GDP per capita for each continent and the corresponding countries and year. The data has been grouped by continent and further minimum and maximum GDP per capita values have beens shown with the cooresponding countries and year. It can be seen that the maximum GDP during the time period was in Kuwait, Asia in the year 1957. While the country with the minimum GDP was Congo, DEm.Rep. in the year 2002. 
 In Africa, minimmum GDP per capita was found in the Congo and Dem.Rep in the year 2002 and the maximum was found in country Libya in the year 1977. Similar inferences can be made by the following table. 
 
 ```{r}
 gapminder %>% 
   group_by(continent) %>% 
-  summarise(MinGDP=min(gdpPercap),Mincountry=country[gdpPercap==MinGDP],Minyear=year[gdpPercap==MinGDP],
+  summarise(MinGDP=min(gdpPercap),Mincountry=country[gdpPercap==MinGDP],Minyear=year[gdpPercap==MinGDP], 
             MaxGDP=max(gdpPercap),Maxcountry=country[gdpPercap==MaxGDP],Maxyear=year[gdpPercap==MaxGDP]) %>% 
     mutate(Range=round((Range=MaxGDP-MinGDP))) %>% 
   knitr::kable()
@@ -64,7 +64,7 @@ gapminder %>%
    group_by(continent) %>% 
    summarise(MinGDP=min(gdpPercap),MaxGDP=max(gdpPercap)) %>%
   ggplot(aes(size=2))+
-  geom_point(aes(continent,MaxGDP, color="green"))+
+  geom_point(aes(continent,MaxGDP, color="green"))+ #When you use axis(in aes) for multiple layers, it combines them together in one plot. 
   geom_point(aes(continent,MinGDP, color="blue"))+
   labs(title="Minimum and Maximum GDP of each",
                x="Continent",
@@ -73,5 +73,37 @@ gapminder %>%
   
 ```
 
+
+##Task 6
+Asia seems to have the highest range of GDP per capita among other countries. Let's explore this a little further. The following plot shows that there are only a few countires which have GDP above 60,000$. It can also be observed that these countries don't have very high life expectancy, something that one would expect in.It looks like there are only a handful countries that have GDP over 40,000 in Asia. Let's try to identify these and add them to a tibble.
+```{r}
+gapminder %>% 
+  filter(continent=='Asia') %>%
+  group_by(year) %>% 
+  arrange(year) %>% 
+  ggplot(aes(gdpPercap,lifeExp, size=pop/1000000))+
+  geom_point(alpha=0.4, shape=21, color="purple")+
+  labs(title="GDP per cap vs Life expectancy in Asia",
+       x="GDP per capita",
+       y="Life Expectancy")
+  #geom_line(aes(year,lifeExp))
+```
+
+Now, let's try to find out the specific countries that have extremely high GDP per capita in Asia compared to the other countries and add them in a tibble. 
+
+```{r}
+gapminder %>% 
+  filter(continent=='Asia') %>%
+  group_by(year) %>% 
+  arrange(pop) %>% 
+  filter(gdpPercap>40000) %>% 
+  mutate(GrossGDP=gdpPercap*pop) %>% 
+  knitr::kable()
+  
+  
+```
+
+
+From the table, it can be inferred that most of the outliers (data points above 40000 GDP) belong to Kuwait except one (Singapore). There has been a steady increase in the Gross GDP of Kuwait over the years. However,the GDP per capita shows a different trend. Clearly, something significant happened in the 1970's that resulted in a decline in both GDP per capita and GROSS GDP.  
 
 
