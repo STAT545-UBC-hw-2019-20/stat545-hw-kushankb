@@ -16,7 +16,7 @@ library(ggridges)#to make some really cool ridge plots!
 library(scales)
 ```
 ## Task 5: Exploring how life expectancy changed over time on different continents.
-The following table shows the minimum and maximum life expectancy and the corresponding countries on different continents every year. It can be seen that the minimum life expectancy was in Rwanada, Africa in the year 1992 and the maximum life expectancy was in Afghanistan, Asia in the year 2007. The Range column shows the range of life expectancy on each continent every year. 
+The following table shows the minimum and maximum life expectancy and the corresponding countries on different continents every year. It can be seen that the minimum life expectancy was in Rwanada, Africa in the year 1992 and the maximum life expectancy was in Japan, Asia in the year 2007. The Range column shows the range of life expectancy on each continent every year. 
 
 ```{r}
 gapminder%>%
