@@ -80,11 +80,21 @@ DT::datatable()
 
 ## Exercise 3
 
-Reading data
+Reading the data
 
 ```{r}
 guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
 email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
+
+```
+
+
+### Exercise 3.1
+```{r}
+email_n<-separate_rows(email,guest,sep=",")%>% 
+  rename(name=guest)
+guest %>% 
+  left_join(email_n, by="name")
 
 ```
 
