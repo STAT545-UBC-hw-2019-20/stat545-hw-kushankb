@@ -1,5 +1,5 @@
 ---
-title: "hw04"
+title: "Homework 04"
 output: html_document
 ---
 
@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ###Load library 
-```{r}
+```{r echo=FALSE}
 library(gapminder)
 library(tidyverse)
 library(ggplot2)
