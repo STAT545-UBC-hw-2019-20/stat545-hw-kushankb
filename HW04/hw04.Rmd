@@ -16,7 +16,13 @@ library(knitr)
 ```
 
 ## Exercise 1- Univariant option 1
-Making simplified tibble for life expectancy in India and Canada
+Univariate Option 1
+Make a tibble with one row per year, and columns for life expectancy for two or more countries.
+Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+Re-lengthen the data.
+
+
+### 1.1 Making simplified tibble for life expectancy in India and Canada: Making data more usable
 ```{r}
 wide_data<-gapminder %>% 
   filter(country=="India" | country=="Canada") %>% 
@@ -30,7 +36,8 @@ DT::datatable(wide_data)
   
 ```
 
-### Ploting the life expectancy of India against Canada
+### 1.2 Ploting the life expectancy of India against Canada
+One can see how the range of the two countries vary. Can also see that both the countries have an increasing trend and probably a good linear correlation. 
 ```{r}
 wide_data %>% 
   ggplot(aes(Lf_Canada, Lf_India))+
@@ -39,7 +46,8 @@ wide_data %>%
 ```
 
 
-### Re-lengthening the data back to normal
+###1.3 Re-lengthening the data back to normal
+Not much to say about this. Used the pivot_longer function to re-lengthen the data back. 
 ```{r}
 wide_data %>% 
   pivot_longer(cols=-year,
@@ -52,9 +60,11 @@ DT::datatable()
 
 
 ##Exercise 2
+Multivariate Option 1
+Make a tibble with one row per year, and columns for life expectancy and GDP per capita (or two other numeric variables) for two or more countries.
+Re-lengthen the data.
 
-
-###Making simplified tibble for life expectancy in India and Canada
+###2.1 Making simplified tibble for life expectancy in India and Canada
 ```{r}
 wide_data2<-gapminder %>% 
   filter(country=="India" | country=="Canada") %>% 
@@ -66,7 +76,7 @@ wide_data2<-gapminder %>%
 DT::datatable(wide_data2)
 ```
 
-###Re-lengthening the data
+###2.2 Re-lengthening the data
 
 
 ```{r}
@@ -89,12 +99,37 @@ email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/maste
 ```
 
 
-### Exercise 3.1
-```{r}
-email_n<-separate_rows(email,guest,sep=",")%>% 
-  rename(name=guest)
-guest %>% 
-  left_join(email_n, by="name")
+### Exercise 3.1: 
+For each guest in the guestlist (guest tibble), add a column for email address, which can be found in the email tibble.
 
+To this, first the email dataframe is modified to represent two columns, name and actual email. Further, the new email dataframe is joined using left_join by using the 'name'. 
+
+```{r}
+email_n<-separate_rows(email, guest, sep=", ")%>% 
+  rename(name=guest)
+
+guest %>% 
+  left_join(email_n, by="name") %>% 
+DT::datatable()
+
+```
+
+###Exercise 3.2:
+  Who do we have emails for, yet are not on the guestlist?
+For this, anti_join works perfectly and makes the process extremely easy. 
+```{r}
+email_notguest<- email_n %>% 
+  anti_join(guest, by="name")
+knitr::kable(email_notguest)
+```
+
+###Exercise 3.3:
+Make a guestlist that includes everyone we have emails for (in addition to those on the original guestlist).
+
+
+```{r}
+guest %>% 
+  full_join(email_n, by="name") %>% 
+DT::datatable()
 ```
 
