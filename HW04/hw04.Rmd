@@ -1,0 +1,90 @@
+---
+title: "hw04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+###Load library 
+```{r}
+library(gapminder)
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(knitr)
+```
+
+## Exercise 1- Univariant option 1
+Making simplified tibble for life expectancy in India and Canada
+```{r}
+wide_data<-gapminder %>% 
+  filter(country=="India" | country=="Canada") %>% 
+  select(lifeExp, year, country) %>% 
+  pivot_wider(id_cols =year,
+              names_from = country,
+              names_prefix = "Lf_",
+              values_from = lifeExp)
+DT::datatable(wide_data)
+ # Do not convert to DT before plotting DT::datatable(wide_data)
+  
+```
+
+### Ploting the life expectancy of India against Canada
+```{r}
+wide_data %>% 
+  ggplot(aes(Lf_Canada, Lf_India))+
+  geom_point(color="blue", size=6, shape=19)+
+  theme_bw()
+```
+
+
+### Re-lengthening the data back to normal
+```{r}
+wide_data %>% 
+  pivot_longer(cols=-year,
+               names_to ="Country",
+               names_prefix="Lf_",
+               values_to = "LifeExp") %>% 
+DT::datatable()
+```
+
+
+
+##Exercise 2
+
+
+###Making simplified tibble for life expectancy in India and Canada
+```{r}
+wide_data2<-gapminder %>% 
+  filter(country=="India" | country=="Canada") %>% 
+  select(lifeExp, year, country, gdpPercap) %>% 
+  pivot_wider (id_cols =year,
+              names_from = country,
+              names_sep = c("_"),
+              values_from = c(lifeExp,gdpPercap))
+DT::datatable(wide_data2)
+```
+
+###Re-lengthening the data
+
+
+```{r}
+wide_data2 %>% 
+  pivot_longer (cols=-year,
+               names_to =c(".value","country"),
+               names_sep="_",
+               values_to = c("LifeExp","gdpPercap")) %>%  
+DT::datatable()
+```
+
+## Exercise 3
+
+Reading data
+
+```{r}
+guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
+email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
+
+```
+
