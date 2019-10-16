@@ -12,7 +12,7 @@ My name is Kushank and I'm a first year PhD student at the _Institute for Resour
 * [Assignment 1](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-kushankb) 
 * [Assignment 2](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-kushankb/HW02/hw02.html)
 * [Assignment 3](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-kushankb/HW03/hw03.html)
-* Assignment 4
+* [Assignment 4](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-kushankb/tree/master/HW04)
 * Assignment 5
 
 ![Are you a data scientist?](datascience.png)
