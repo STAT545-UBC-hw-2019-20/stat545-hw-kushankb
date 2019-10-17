@@ -46,7 +46,7 @@ class(gapminder$country) #confirms that the country variable is a factor
 nlevels(gapminder$country) # shows the number of countries in the dataset
 ```
 
-Now, let's select all the countries in the continent of Asia and see how drop function can be useful. The former set of code evaluates without using drop function. When calculating number of countries in Asia and Africa we get the number of total countries in the database ie 142. The latter code uses drop function and gives the actual number of countries in Asia and Africa ie 85. This showcases the importance of using drop function while working with factors.   
+Now, let's select all the countries in the continent of Asia and see how drop function can be useful. The former set of code evaluates without using drop function. When calculating number of countries in Asia  we get the number of total countries in the database ie 142. The latter code uses drop function and gives the actual number of countries in Asia  ie 33. This showcases the importance of using drop function while working with factors.   
 
 ####Without dropping 
 ```{r}
@@ -58,9 +58,9 @@ nlevels(Asia_country$country) # counting number of countries in Asia without usi
 ```
 ####With dropping
 ```{r}
-Asia_country_drop<- Asia_country %>% 
-  droplevels()
-nlevels(Asia_country_drop$country)
+Asia_country$country %>% 
+fct_drop() %>%  #droplevels() is the base r equivalent and can also be used. 
+nlevels()
 
 ```
 
@@ -105,10 +105,66 @@ ggplotly()
 ```
 
 ## Exercise 3
+Task: Experiment with at least one of:
 
+write_csv()/read_csv() (and/or TSV friends),
+saveRDS()/readRDS(),
+dput()/dget().
 
+### Let's look at the incremental increase in life expectancy of each country in Asia and Africa from the initial year recorded. The function first() is used to calculate incremental increase. The resulting data is stored in a csv file called gapminder_inclife.csv by using the here()  function. 
+Further, the data is read back using here() function and explored using 
+```{r}
+gapminder_inclife<- gapminder %>%
+  group_by(country) %>% 
+  arrange(year) %>% 
+  mutate(incr_lifeexp = lifeExp-first(lifeExp)) %>% 
+  arrange(country)%>% 
+  filter(continent==c("Asia","Africa"))
+DT::datatable(gapminder_inclife)
+
+write.csv(gapminder_inclife, here::here("HW05","gapminder_inclife.csv"))
+
+read.csv(here::here("HW05","gapminder_inclife.csv")) %>% 
+  DT::datatable()
+
+##fct_reorder2(gapminder_inclife$continent, gapminder_inclife$gdpPercap,min)
+fct_count(fct_drop((gapminder_inclife$continent)))
+
+```
+
+Same number of entries(510) and same variables can be observed in the initital tibble and the one after exporting to the system and re-reading it. 
 ## Exercise 4
 
+Task: Create a side-by-side plot and juxtapose your first attempt (show the original figure as-is) with a revised attempt after some time spent working on it and implementing principles of effective plotting principles. Comment and reflect on the differences.
+
+For the assignment three, I had plotted GDP per capita vs life expectancy in Asia. Here is the before-visualization lecture: 
+```{r}
+gapminder %>% 
+  filter(continent=='Asia') %>%
+  group_by(year) %>% 
+  arrange(year) %>% 
+  ggplot(aes(gdpPercap,lifeExp, size=pop/1000000))+
+  geom_point(alpha=0.7, shape=21, color="purple")+
+  labs(title="GDP per cap vs Life expectancy in Asia",
+       x="GDP per capita",
+       y="Life Expectancy")
+```
+
+
+Now, let's see 'after' the visualization lecture:
+```{r}
+p<-gapminder %>% 
+  filter(continent=='Asia') %>%
+  group_by(year) %>% 
+  arrange(year) %>% 
+  ggplot(aes(gdpPercap,lifeExp, size=pop/1000000))+
+  geom_point(alpha=0.3, shape=21, color="purple")+
+  labs(title="GDP per cap vs Life expectancy in Asia",
+       x="GDP per capita",
+       y="Life Expectancy")
+  ggplotly(p)
+
+```
 
 
 ## Exercise 5
