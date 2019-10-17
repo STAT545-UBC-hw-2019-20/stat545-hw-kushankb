@@ -22,10 +22,6 @@ library(plotly)
 ## Exercise 1
 
 
-
-
-
-
 ## Exercise 2: Factor management
 
 Task: Choose one dataset (of your choice) and a variable to explore. After ensuring the variable(s) you’re exploring are indeed factors, you should:
