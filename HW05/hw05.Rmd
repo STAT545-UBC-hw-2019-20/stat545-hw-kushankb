@@ -17,23 +17,33 @@ library(dplyr)
 library(forcats)
 library(ggplot2)
 library(plotly)
+library(gridExtra)
+library(processx)
 ```
 
 ## Exercise 1
+
+Task: In your own words, summarize the value of the here::here package in 250 words or fewer.
+
+Here package helps make Rprojects more flexible across operating systems. One major issue while sharing scripts or .rmd files with collaborators is that they may be working on different operating systems and might have the data in different directories. Different operating systems have different syntax for writing directories/path. For example, mac uses '/' to separate paths while windows use '\'. Now, for instance if one defined a path for some specific data using windows (c:\desktop\data\test.csv), and someone (possibly a collaborator) tried to run the same script on mac OS, the person would receive an error because mac OS would not be able recognise the directory. 
+Another advantage of here() is that you do not really need to keep checking the current directory while saving files to the system or your repo. Here() does most of the work for you. 
+
+More importantly, when one defines a path to save or load files from, that path is specific to that person’s system. Almost always, that path would not be on another person’s system and would result in an error. 
+
+
+
 
 
 ## Exercise 2: Factor management
 
 Task: Choose one dataset (of your choice) and a variable to explore. After ensuring the variable(s) you’re exploring are indeed factors, you should:
-
 Drop factor / levels;
 Reorder levels based on knowledge from data.
 
-Explore the effects of re-leveling a factor in a tibble by:
-
-comparing the results of arrange on the original and re-leveled factor.
+Explore the effects of re-leveling a factor in a tibble by: comparing the results of arrange on the original and re-leveled factor.
 Plotting a figure of before/after re-leveling the factor (make sure to assign the factor to an aesthetic of your choosing).
 These explorations should involve the data, the factor levels, and at least two figures (before and after.
+
 
 ###2.1 Checking class and exploring drop function
 
@@ -46,9 +56,9 @@ class(gapminder$country) #confirms that the country variable is a factor
 nlevels(gapminder$country) # shows the number of countries in the dataset
 ```
 
-Now, let's select all the countries in the continent of Asia and see how drop function can be useful. The former set of code evaluates without using drop function. When calculating number of countries in Asia  we get the number of total countries in the database ie 142. The latter code uses drop function and gives the actual number of countries in Asia  ie 33. This showcases the importance of using drop function while working with factors.   
+Now, let's select all the countries in the continent of Asia and see how drop function can be useful. The former set of code evaluates without using drop function. When calculating number of countries in Asia  we get the number of total countries in the database ie. 142. The latter code uses drop function and gives the actual number of countries in Asia  ie. 33. This showcases the importance of using drop function while working with factors.   
 
-####Without dropping 
+#### Without dropping 
 ```{r}
 #Let's filter all the countries in the continent of Asia
 Asia_country<- gapminder %>% 
@@ -56,7 +66,7 @@ Asia_country<- gapminder %>%
 nlevels(Asia_country$country) # counting number of countries in Asia without using the drp
 
 ```
-####With dropping
+#### With dropping
 ```{r}
 Asia_country$country %>% 
 fct_drop() %>%  #droplevels() is the base r equivalent and can also be used. 
@@ -70,6 +80,7 @@ nlevels()
 To show how reordering can be helpful, let's consider one particular year. For this purpose, 2007 has been chosen and the corresponding  lollipop plot has been plotted. 
 
 #### Lolliplot without re-ordering:
+
 ```{r}
 q<-Asia_country %>% 
   filter(year=="2007") %>% 
@@ -89,8 +100,9 @@ q %>%
 
 
 #### Lolliplot after re-ordering:
+
 ```{r}
-p<-Asia_country %>% 
+p <- Asia_country %>% 
   filter(year=="2007") %>% 
   ggplot(aes(x = fct_reorder(country, lifeExp), y = lifeExp))+
   geom_segment(aes(x = fct_reorder(country,lifeExp), xend = fct_reorder(country, lifeExp), y=0, yend=lifeExp), color="skyblue")+
@@ -100,18 +112,24 @@ p<-Asia_country %>%
     x = "Country",
     y = "Life Expectancy")+
   coord_flip()
+
 p %>%   
 ggplotly()
+
 ```
 
-## Exercise 3
-Task: Experiment with at least one of:
+You can see how the two graphs differ. The one with re-ordering of factors is more readable. One can easily infer a lot more information from this compared to the one without re-ordering. 
 
+
+## Exercise 3
+
+Task: Experiment with at least one of:
 write_csv()/read_csv() (and/or TSV friends),
 saveRDS()/readRDS(),
 dput()/dget().
 
-### Let's look at the incremental increase in life expectancy of each country in Asia and Africa from the initial year recorded. The function first() is used to calculate incremental increase. The resulting data is stored in a csv file called gapminder_inclife.csv by using the here()  function. 
+
+Let's look at the incremental increase in life expectancy of each country in Asia and Africa from the initial year recorded. The function first() is used to calculate incremental increase. The resulting data is stored in a csv file called gapminder_inclife.csv by using the here()  function. 
 Further, the data is read back using here() function and explored using 
 ```{r}
 gapminder_inclife<- gapminder %>%
@@ -124,47 +142,81 @@ DT::datatable(gapminder_inclife)
 
 write.csv(gapminder_inclife, here::here("HW05","gapminder_inclife.csv"))
 
-read.csv(here::here("HW05","gapminder_inclife.csv")) %>% 
-  DT::datatable()
+new_gap<-read.csv(here::here("HW05","gapminder_inclife.csv"))# %>% 
+DT::datatable(new_gap)
 
 ##fct_reorder2(gapminder_inclife$continent, gapminder_inclife$gdpPercap,min)
 fct_count(fct_drop((gapminder_inclife$continent)))
 
+a1 <- new_gap %>% 
+  filter(continent=="Africa") %>%
+  group_by(country) %>% 
+  summarise(avg = mean (gdpPercap)) %>% 
+  filter(avg > 10000)
+a1$country
+a2 <- gapminder %>% filter(country %in% a1$country) %>%  droplevels()
+
+a2 %>% 
+  ggplot(aes(year, y= gdpPercap, color = fct_reorder2(country, year, gdpPercap))) + geom_line() + geom_point()
 ```
 
 Same number of entries(510) and same variables can be observed in the initital tibble and the one after exporting to the system and re-reading it. 
+
+
 ## Exercise 4
 
 Task: Create a side-by-side plot and juxtapose your first attempt (show the original figure as-is) with a revised attempt after some time spent working on it and implementing principles of effective plotting principles. Comment and reflect on the differences.
 
-For the assignment three, I had plotted GDP per capita vs life expectancy in Asia. Here is the before-visualization lecture: 
+For the assignment three, I have plotted GDP per capita vs life expectancy in Asia. Here is the before-visualization lecture: 
 ```{r}
-gapminder %>% 
+q<-gapminder %>% 
   filter(continent=='Asia') %>%
   group_by(year) %>% 
-  arrange(year) %>% 
+  arrange(year) %>%
   ggplot(aes(gdpPercap,lifeExp, size=pop/1000000))+
   geom_point(alpha=0.7, shape=21, color="purple")+
   labs(title="GDP per cap vs Life expectancy in Asia",
        x="GDP per capita",
        y="Life Expectancy")
+q
 ```
 
 
 Now, let's see 'after' the visualization lecture:
+Making a dynamic plot by ggplotly function, one can easily identify the outliers and the corresponding id numbers. 
 ```{r}
 p<-gapminder %>% 
   filter(continent=='Asia') %>%
-  group_by(year) %>% 
-  arrange(year) %>% 
+  #group_by(year) %>% 
+  #arrange(year) %>% 
   ggplot(aes(gdpPercap,lifeExp, size=pop/1000000))+
-  geom_point(alpha=0.3, shape=21, color="purple")+
-  labs(title="GDP per cap vs Life expectancy in Asia",
+  geom_point(alpha=0.8, shape=21, fill="skyblue", color="purple")+
+  theme(panel.background = element_blank())+
+  labs(title="Asia",
        x="GDP per capita",
-       y="Life Expectancy")
-  ggplotly(p)
+       y="Life Expectancy")+
+  coord_flip()
 
+pp<- ggplotly(p)
+pp
+# Attempted to create an animation but looks like it didn't work within rmd. : plotly(frame = ~year, hoveinfo = "text",mode "markers")) chart_link = api_create(pp, filename="animations-mulitple-trace") chart_link
 ```
 
+```{r, fig.height=5, fig.width=12}
+grid.arrange(q, p, nrow = 1)
+```
 
 ## Exercise 5
+
+Let's try saving the previous two plots onto the system and pushing it all to the repository. 
+
+```{r}
+ggsave(q, file="before.png", path = here::here("HW05") )
+#orca(p, "after.png", path=here::here("HW05")) was trying to export a dynamic graph, kinda failed.
+ggsave(p, file="after.png", path = here::here("HW05"))
+
+```
+```{r}
+##![Alt text](\HW05\after.png)
+```
+
