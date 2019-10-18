@@ -212,11 +212,14 @@ Let's try saving the previous two plots onto the system and pushing it all to th
 
 ```{r}
 ggsave(q, file="before.png", path = here::here("HW05") )
+
 #orca(p, "after.png", path=here::here("HW05")) was trying to export a dynamic graph, kinda failed.
 ggsave(p, file="after.png", path = here::here("HW05"))
 
 ```
-```{r}
-##![Alt text](\HW05\after.png)
-```
+
+![BEFORE](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-kushankb/HW05/before.png)
+
+![AFTER](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-kushankb/HW05/after.png)
+
 
