@@ -6,9 +6,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-# Assignment 5
 
- ### Loading libraries
+### Loading libraries
 
 ```{r load packages, warning = FALSE, message = FALSE}
 library(gapminder)
